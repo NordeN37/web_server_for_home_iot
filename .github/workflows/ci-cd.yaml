@@ -20,15 +20,11 @@ jobs:
           docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASS }}
           docker push norden37/go-web-server-mqtt-home-iot:latest
 
-      - name: Deploy Services
-        run: |
-          docker run -it --rm \
-            -e SSH_PASSWORD=${{ secrets.SSH_PASSWORD }} \
-            -e SSH_USER=${{ secrets.SSH_USER }} \
-            -e MQTT_CLIENT_ID=${{ secrets.MQTT_CLIENT_ID }} \
-            -e MQTT_ENDPOINT=${{ secrets.MQTT_ENDPOINT }} \
-            -e MQTT_USER=${{ secrets.MQTT_USER }} \
-            -e MQTT_PASSWORD=${{ secrets.MQTT_PASSWORD }} \
-            -e TOKEN_USERS=${{ secrets.TOKEN_USERS }} \
-            -v $(pwd)/web_server_for_home_iot:/work \
-            ubuntu:latest /bin/bash -c 'apt-get update && apt-get install -y sshpass && cd /work && sshpass -p $SSH_PASSWORD ssh $SSH_USER@193.42.112.11 "cd ./web_server_for_home_iot && docker-compose pull && docker-compose up -d --env-file .env"'
+      - name: Run sshpass commands
+        uses: matheusvanzan/sshpass-action@v2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          user: ${{ secrets.SSH_USER }}
+          pass: ${{ secrets.SSH_PASSWORD }}
+          run: |
+            'cd ./web_server_for_home_iot && docker-compose pull && docker-compose up -d --env-file .env'
