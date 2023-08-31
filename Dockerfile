@@ -5,7 +5,7 @@ FROM golang:${GO_VER}-alpine${ALPINE_VER} as builder
 # ARG GO_MAIN_PATH
 ARG VERSION=0.1
 WORKDIR /app
-COPY docker .
+COPY . .
 
 RUN apk --no-cache update && apk --no-cache add git gcc libc-dev
 
