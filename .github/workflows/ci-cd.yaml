@@ -18,7 +18,7 @@ jobs:
           docker build -t go-web-server-mqtt-home-iot .
           docker tag go-web-server-mqtt-home-iot:latest norden37/go-web-server-mqtt-home-iot:latest
           docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASS }}
-          docker push NordeN37/go-web-server-mqtt-home-iot:latest
+          docker push nordeN37/go-web-server-mqtt-home-iot:latest
 
       - name: Deploy Services
         run: |
