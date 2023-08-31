@@ -15,7 +15,7 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          docker build -t my-golang-app ./docker
+          docker build -t my-golang-app .
           docker tag go-web-server-mqtt-home-iot:latest NordeN37/go-web-server-mqtt-home-iot:latest
           docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASS }} 193.42.112.11
           docker push NordeN37/go-web-server-mqtt-home-iot:latest
