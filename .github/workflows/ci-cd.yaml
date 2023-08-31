@@ -1,0 +1,32 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build and Push Docker Images
+        run: |
+          docker build -t my-golang-app ./docker
+          docker tag go-web-server-mqtt-home-iot:latest NordeN37/go-web-server-mqtt-home-iot:latest
+          docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASS }} 193.42.112.11
+          docker push NordeN37/go-web-server-mqtt-home-iot:latest
+
+      - name: Deploy Services
+        run: |
+          apt-get update && apt-get install -y sshpass
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh ${{ secrets.SSH_USER }}@193.42.112.11 'cd ./web_server_for_home_iot && docker-compose pull && docker-compose up -d'
+        env:
+          MQTT_CLIENT_ID: ${{ vars.ENV_CONTEXT_VAR }}
+          MQTT_ENDPOINT: ${{ vars.ENV_CONTEXT_VAR }}
+          MQTT_USER: ${{ vars.ENV_CONTEXT_VAR }}
+          MQTT_PASSWORD: ${{ secrets.production_MQTT_PASSWORD }}
+          TOKEN_USERS: ${{ secrets.production_ENV_CONTEXT_VAR }}
