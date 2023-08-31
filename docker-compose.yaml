@@ -19,8 +19,7 @@ services:
       - my_iot
 
   golang-web:
-    build:
-      dockerfile: Dockerfile
+    image: norden37/go-web-server-mqtt-home-iot:latest
     container_name: golang-web
     restart: always
     environment:
