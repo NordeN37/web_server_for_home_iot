@@ -5,7 +5,7 @@ FROM golang:${GO_VER}-alpine${ALPINE_VER} as builder
 # ARG GO_MAIN_PATH
 ARG VERSION=0.1
 WORKDIR /app
-COPY . .
+COPY docker .
 
 RUN apk --no-cache update && apk --no-cache add git gcc libc-dev
 
@@ -14,6 +14,6 @@ RUN CGO_ENABLED=1 GOOS=linux go build -tags musl -mod=vendor -a -installsuffix c
 FROM alpine:${ALPINE_VER}
 
 WORKDIR /root/
-COPY --from=builder /app/app .
+COPY --from=builder /app .
 
 CMD ["./app"]

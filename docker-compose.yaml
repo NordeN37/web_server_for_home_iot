@@ -20,7 +20,7 @@ services:
 
   golang-web:
     build:
-      dockerfile: ./docker/Dockerfile
+      dockerfile: Dockerfile
     container_name: golang-web
     restart: always
     environment:
