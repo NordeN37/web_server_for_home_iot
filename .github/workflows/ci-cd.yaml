@@ -27,4 +27,4 @@ jobs:
           user: ${{ secrets.SSH_USER }}
           pass: ${{ secrets.SSH_PASSWORD }}
           run: |
-            'cd ./web_server_for_home_iot && docker-compose pull && docker-compose up -d --env-file .env'
+            cd /root/web_server_for_home_iot && git pull && docker-compose pull && docker-compose up -d --env-file .env
