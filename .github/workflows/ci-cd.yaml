@@ -17,13 +17,13 @@ jobs:
         run: |
           docker build -t my-golang-app .
           docker tag docker tag go-web-server-mqtt-home-iot:latest norden37/go-web-server-mqtt-home-iot:latest
-          docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASS }} 193.42.112.11
+          docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASS }}
           docker push NordeN37/go-web-server-mqtt-home-iot:latest
 
       - name: Deploy Services
         run: |
           apt-get update && apt-get install -y sshpass
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh ${{ secrets.SSH_USER }}@193.42.112.11 'cd ./web_server_for_home_iot && docker-compose pull && docker-compose up -d'
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh ${{ secrets.SSH_USER }}@193.42.112.11 'cd ./web_server_for_home_iot && docker-compose pull && docker-compose up -d --env-file .env'
         env:
           MQTT_CLIENT_ID: ${{ vars.ENV_CONTEXT_VAR }}
           MQTT_ENDPOINT: ${{ vars.ENV_CONTEXT_VAR }}
